@@ -1,4 +1,4 @@
-import tkinter
+import tkinter 
 from tkinter import ttk
 from tkinter import messagebox
 
@@ -14,7 +14,6 @@ def print_details():
     lastname = last_name_entry.get()
 
     if firstname and lastname:
-        
         hire = hire_spinbox.get()
         items = items_combobox.get()
 
@@ -31,13 +30,13 @@ frame = tkinter.Frame(window)
 frame.pack()
 
 # Add background color
-window.configure(background='lightblue')
+window.configure(background='#f7dbc6')
 
-frame = tkinter.Frame(window, bg='lightblue')
+frame = tkinter.Frame(window, bg='#f7dbc6')
 frame.pack()
 
 #Saving User Info
-user_info_frame = tkinter.LabelFrame(frame, text="User Information")
+user_info_frame = tkinter.LabelFrame(frame, text="User Information", bg= "#f7dbc6")
 user_info_frame.grid(row= 0, column=0, padx=20, pady=20)
 
 first_name_label = tkinter.Label(user_info_frame, text= "First name")
@@ -54,7 +53,7 @@ last_name_entry.grid(row=1, column=1)
 #list user can choose from
 #always specifec parent except root window this is user info frame
 
-items_label = tkinter.Label(user_info_frame, text="Item Hired")
+items_label = tkinter.Label(user_info_frame, text="Item Hired", bg= "#f7dbc6")
 items_combobox = ttk.Combobox(user_info_frame, values= ["50 pack of balloons", "ribbons","tassles"])
 items_label.grid(row=2,column=0)
 items_combobox.grid(row=3,column=0)
@@ -71,27 +70,14 @@ hire_spinbox.grid(row=3, column=1)
 for widget in user_info_frame.winfo_children():
     widget.grid_configure(padx=10, pady=5)
 
-#Saving Course Info
-    #sticky when used  in grid function it means expand in news (north, east, wesst,south
-
-numcourses_label = tkinter.Label(user_info_frame, text="# Completed Courses")
-numcourses_spinbox = tkinter.Spinbox(courses_frame, from_=0, to="infinity")
-numcourses_label.grid(row=0,column=0)
-numcourses_spinbox.grid(row=1,column=0)
-
-numsemesters_label = tkinter.Label(courses_frame, text="# Semesters")
-numsemesters_spinbox = tkinter.Spinbox(courses_frame, from_=0, to="infinity")
-numsemesters_label.grid(row=0, column=2)
-numsemesters_spinbox.grid(row=1, column=2)
-
-for widget in courses_frame.winfo_children():
-    widget.grid_configure(padx=10, pady=5)
 
 #Button
 button = tkinter.Button(frame, text="Print Details",command= print_details)
 #why command is here is because it says when this button is clicked go ahead and executee the data from def (define)
 #Retrieving the data from the input widgets
 button.grid(row=2,column=0, sticky="news", padx=20, pady=20)
+
+
 
 window.mainloop()
 
