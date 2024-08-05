@@ -2,6 +2,7 @@ import tkinter
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import random
 
 def quit():
     comfirmation = messagebox.askquestion("Are you are you want to quit?")
@@ -9,33 +10,45 @@ def quit():
         window.quit()
  
 
-#def receipt():
-    #random_number_task = random.randint (1,80000)
+def receipt():
+    random_number_task = random.randint (100000,999999)
 
-def print_details():
+
+#def print_details():
     #User info
-    firstname = first_name_entry.get()
-    lastname = last_name_entry.get()
-    item = items_combobox.get()
-    quantity = hire_spinbox.get()
+    #firstname = first_name_entry.get()
+    #lastname = last_name_entry.get()
+   # item = items_combobox.get()
+    #quantity = hire_spinbox.get()
 
-    if firstname and lastname:
-        hire = hire_spinbox.get()
-        items = items_combobox.get()
+    #if firstname and lastname:
+       # hire = hire_spinbox.get()
+       # items = items_combobox.get()
 
-        print("First name: ", firstname, "Last name: ",lastname)
-        print("Number Hired:", hire, "Items:", items)
-        print("-------------------------------------------------")
-    else:
-        tkinter.messagebox.showwarning(title="Error", message="First name and last name are required")
+       # print("First name: ", firstname, "Last name: ",lastname)
+       # print("Number Hired:", hire, "Items:", items)
+        #print("-------------------------------------------------")
+   # else:
+        #tkinter.messagebox.showwarning(title="Error", message="First name and last name are required")
 #ttk= themed tkinter -the is the collection of themed widgets that allow more morden applications for combo box eg
+
+def customer_reciept():
+    global hire_window
+    hire_window = tk.Toplevel()
+    hire_window.title('Customer Details')
+    hire_window.configure(background='#f7dbc6')
+    button_print = tk.Button(frame, text="Save Data", command=save_data)
+    button_print.pack()
+
+#Function to write data to text file
+
+
 
 #Main window setup
 window = tk.Tk()
 window.title("Julie's Party Hire Store Data Entry Form")
 window.geometry('450x350')
 window.configure(background='#f7dbc6')
-
 
 #Header Setup
 header_bg_frame = tk.Frame(window, bg='#ebac7c', height=50, width=400)
@@ -94,7 +107,7 @@ def hire_window():
     for widget in user_info_frame.winfo_children():
         widget.grid_configure(padx=10, pady=5)
         #Button
-    button = tkinter.Button(frame, text="Print Details",command= print_details)
+    button = tkinter.Button(frame, text="Print Details",command= customer_reciept)
     #why command is here is because it says when this button is clicked go ahead and executee the data from def (define)
     #Retrieving the data from the input widgets
     button.grid(row=2,column=0, sticky="news", padx=20, pady=20)
@@ -145,7 +158,7 @@ def return_window():
     for widget in user_info_frame.winfo_children():
         widget.grid_configure(padx=10, pady=5)
         #Button
-    button = tkinter.Button(frame, text="Print Details",command= print_details)
+    button = tkinter.Button(frame, text="Print Details",command= customer_reciept)
     #why command is here is because it says when this button is clicked go ahead and executee the data from def (define)
     #Retrieving the data from the input widgets
     button.grid(row=2,column=0, sticky="news", padx=20, pady=20)
