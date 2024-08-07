@@ -4,45 +4,73 @@ from tkinter import ttk
 from tkinter import messagebox
 import random
 
+#Ask the user if they want to quit
 def quit():
     comfirmation = messagebox.askquestion("Are you are you want to quit?")
     if comfirmation == 'yes':
         window.quit()
- 
 
-def receipt():
+#Function to write data to text file
+def save_data():
+    firstname = first_name_entry.get()
+    lastname = last_name_entry.get()
+   # item = items_combobox.get()
+  #  quantity = hire_spinbox.get()
+    #save_data = button_save.get()
+    if firstname !="" and lastname !="":
+        with open("data.txt", "a") as file:
+            file.write(f"{firstname},{lastname}\n")
+        first_name_entry.delete(0,tk.END)
+        last_name_entry.delete(0, tk.END)
+        messagebox.showinfo("Sucess", "Data saved successfully")
+    else:
+        messagebox.showwarning("Warning", "Please enter both first and last name")
+
+def display_data():
+    try:
+        with open("data.txt", "r") as file:
+            data = file.readlines
+        display_window = tk.Toplevel()
+        display_window.title("Data Display")
+        text = tk.Text(hire_window)
+        text.pack()
+        for line in data:
+            text.insert(tk.END, line)
+    except FileNotFoundError:
+        messagebox.showwarning("Warning", "No data file found")
+
+        
+#To generate receipt
+#def receipt():
     random_number_task = random.randint (100000,999999)
 
-
+#Save hire details and print
 #def print_details():
-    #User info
-    #firstname = first_name_entry.get()
-    #lastname = last_name_entry.get()
-   # item = items_combobox.get()
-    #quantity = hire_spinbox.get()
-
-    #if firstname and lastname:
-       # hire = hire_spinbox.get()
-       # items = items_combobox.get()
-
-       # print("First name: ", firstname, "Last name: ",lastname)
-       # print("Number Hired:", hire, "Items:", items)
-        #print("-------------------------------------------------")
+    
+    #receipt =
+    
+#    if firstname and lastname and item and quantity:
+  #      hire = hire_spinbox.get()
+   #     items = items_combobox.get()
+ #       print("First name: ", firstname, "Last name: ",lastname)
+    #    print("Number Hired:", hire, "Items:", items)
+     #   print("-------------------------------------------------")
    # else:
-        #tkinter.messagebox.showwarning(title="Error", message="First name and last name are required")
+    #    tkinter.messagebox.showwarning(title="Error", message="First name and last name are required")
 #ttk= themed tkinter -the is the collection of themed widgets that allow more morden applications for combo box eg
 
-def customer_reciept():
-    global hire_window
-    hire_window = tk.Toplevel()
-    hire_window.title('Customer Details')
-    hire_window.configure(background='#f7dbc6')
-    button_print = tk.Button(frame, text="Save Data", command=save_data)
-    button_print.pack()
+#def customer_reciept():
+#    global hire_window
+  #  hire_window = tk.Toplevel()
+  #  hire_window.title('Customer Details')
+ #   hire_window.configure(background='#f7dbc6')
+  #  button_save = tk.Button(window, text="Save Data", command=save_data)
+ #   button_save.pack()
 
 #Function to write data to text file
 
-
+#Reciept
+#def generste
 
 #Main window setup
 window = tk.Tk()
@@ -107,7 +135,7 @@ def hire_window():
     for widget in user_info_frame.winfo_children():
         widget.grid_configure(padx=10, pady=5)
         #Button
-    button = tkinter.Button(frame, text="Print Details",command= customer_reciept)
+    button = tkinter.Button(frame, text="Save Details",command= save_data)
     #why command is here is because it says when this button is clicked go ahead and executee the data from def (define)
     #Retrieving the data from the input widgets
     button.grid(row=2,column=0, sticky="news", padx=20, pady=20)
@@ -158,10 +186,15 @@ def return_window():
     for widget in user_info_frame.winfo_children():
         widget.grid_configure(padx=10, pady=5)
         #Button
-    button = tkinter.Button(frame, text="Print Details",command= customer_reciept)
-    #why command is here is because it says when this button is clicked go ahead and executee the data from def (define)
+           #why command is here is because it says when this button is clicked go ahead and executee the data from def (define)
     #Retrieving the data from the input widgets
     button.grid(row=2,column=0, sticky="news", padx=20, pady=20)
+
+    button_save = tkinter.Button(user_info_frame, text="Save Details",command= save_data)
+    button_save.pack()
+
+    button_display = tk.Button(user_info_frame, text="Display Data", command=display_data)
+    button_display.pack() 
     
     
 #Hire button
@@ -178,9 +211,7 @@ button3.pack(expand = True)
 
 
 
-
-
-
+#Able to run the code
 window.mainloop()
 
              
