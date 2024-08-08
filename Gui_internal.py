@@ -2,6 +2,7 @@ import tkinter
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import os
 import random
 
 #Ask the user if they want to quit
@@ -14,14 +15,14 @@ def quit():
 def save_data():
     firstname = first_name_entry.get()
     lastname = last_name_entry.get()
-   # item = items_combobox.get()
-  #  quantity = hire_spinbox.get()
-    #save_data = button_save.get()
+    item = items_combobox.get()
+    quantity = hire_spinbox.get()
     if firstname !="" and lastname !="":
         with open("data.txt", "a") as file:
             file.write(f"{firstname},{lastname}\n")
         first_name_entry.delete(0,tk.END)
         last_name_entry.delete(0, tk.END)
+        
         messagebox.showinfo("Sucess", "Data saved successfully")
     else:
         messagebox.showwarning("Warning", "Please enter both first and last name")
@@ -30,8 +31,8 @@ def display_data():
     try:
         with open("data.txt", "r") as file:
             data = file.readlines
-        display_window = tk.Toplevel()
-        display_window.title("Data Display")
+        hire_window = tk.Toplevel()
+        hire_window.title("Display Data")
         text = tk.Text(hire_window)
         text.pack()
         for line in data:
@@ -135,11 +136,14 @@ def hire_window():
     for widget in user_info_frame.winfo_children():
         widget.grid_configure(padx=10, pady=5)
         #Button
-    button = tkinter.Button(frame, text="Save Details",command= save_data)
+    button_save = tkinter.Button(frame, text="Save Details",command= save_data)
     #why command is here is because it says when this button is clicked go ahead and executee the data from def (define)
     #Retrieving the data from the input widgets
-    button.grid(row=2,column=0, sticky="news", padx=20, pady=20)
+    button_save.grid(row=2,column=0, sticky="news", padx=20, pady=20)
 
+    button_display = tk.Button(frame, text="Display Data", command=display_data)
+    button_display.grid(row=3,column=0, sticky="news", padx=20, pady=20)
+    
 def return_window():
     global return_window
     return_window = tk.Toplevel()
@@ -188,14 +192,12 @@ def return_window():
         #Button
            #why command is here is because it says when this button is clicked go ahead and executee the data from def (define)
     #Retrieving the data from the input widgets
-    button.grid(row=2,column=0, sticky="news", padx=20, pady=20)
-
-    button_save = tkinter.Button(user_info_frame, text="Save Details",command= save_data)
-    button_save.pack()
-
-    button_display = tk.Button(user_info_frame, text="Display Data", command=display_data)
-    button_display.pack() 
     
+    button_save = tkinter.Button(frame, text="Save Details",command= save_data)
+    button_save.grid(row=2,column=0, sticky="news", padx=20, pady=20)
+
+    button_display = tk.Button(frame, text="Display Data", command=display_data)
+    button_display.grid(row=3,column=0, sticky="news", padx=20, pady=20)
     
 #Hire button
 button1 = tkinter.Button(window, text = 'Hire', command = hire_window, width= 10, height= 2)
