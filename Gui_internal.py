@@ -7,46 +7,62 @@ import os
 import random
 #from tkinter import PhotoImage
 
+#Set to store the used receipt numbers to enusre no receipt number is repetead to be unique
+used_receipt_numbers= set()
 
-#Function to Ask the customer if they want to quit and quits
+#Function to ask the customer if they want to quit and quits
 def quit_form():
     comfirmation = messagebox.askquestion("Quit","Are you sure you want to quit?")
     if comfirmation == 'yes':
         main_window.destroy()
 
-def validate_data(firstname, lastname, amount):
+#Function to validate the customer's data
+def validate_data():
     firstname = first_name_entry.get()
     lastname = last_name_entry.get()
     item = items_combobox.get()
     amount = hire_spinbox.get()
-    receipt_number = receipt()
+
+    if firstname == "" or lastname == "" or item == "":
+        messagebox.showerror("Error", "Please fill in all fields.")
+        return False
     if not firstname.isalpha() or not lastname.isalpha():
         messagebox.showerror("Error", "Names can't contain special characters.")
         return False
     if not (1 <=int(amount) <=200):
         messagebox.showerror("Error", "Amount to hire must be between 1 and 200.")
         return False
-    if firstname =="" or lastname =="" or items_combobox.get() == "":
-        messagebox.showerror("Error", "Please fill in all fields.")
-        return False
     return True
+
+#Function that generates random receipt number
+def receipt():
+    #global generate_receipt
+    while True:
+        receipt_number = random.randint(100000,999999)
+        if receipt_number not in used_receipt_numbers:
+            used_receipt_numbers.add(receipt_number)
+            return receipt_number
 
 #Function to write data to text file and save hire details
 def save_data():
-    firstname = first_name_entry.get()
-    lastname = last_name_entry.get()
-    item = items_combobox.get()
-    amount = hire_spinbox.get()
-    receipt_number = receipt()
-
-    if firstname !="" and lastname !="" and amount:
+    if validate_data():
+        firstname = first_name_entry.get()
+        lastname = last_name_entry.get()
+        item = items_combobox.get()
+        amount = hire_spinbox.get()
+        receipt_number = receipt()
+        
+   # if firstname !="" and lastname !="" and amount:
         with open("customer_details.txt", "a") as file:
-            file.write(f"{firstname},{lastname},{item},{amount},{receipt_number}\n")
+            file.write(f"First name: {firstname}, Last name: {lastname}, Item:{item}, Amount:{amount}, Receipt:{receipt_number}\n")
         first_name_entry.delete(0,tk.END)
         last_name_entry.delete(0, tk.END)
+        items_combobox.set('')
+        hire_spinbox.delete(0,tk.END)
+        hire_spinbox.insert(0,1)
         messagebox.showinfo("Success!", f"Data saved successfully with receipt number:{receipt_number}")
-   # else:
-        #messagebox.showwarning("Warning", "Please enter both first and last name")
+    #else:
+        #messagebox.showwarning("Warning", "Please fill out all the fields correctly.")
 
 #Function to display customer details
 def display_data():
@@ -62,15 +78,10 @@ def display_data():
     except FileNotFoundError:
         messagebox.showwarning("Warning", "No data file found")
 
-#Function that generates random receipt number
-def receipt():
-    #global generate_receipt
-    return random.randint(100000,999999)
-
 #Function to delete customer details by receipt number
 #Use list like if receipt_number is here then minus row
 def delete_details():
-    receipt_number = delete_entry.get()
+    receipt_number = delete_entry.get().strip()
     if receipt_number:
         try:
             with open("customer_details.txt", "r") as file:
@@ -80,34 +91,11 @@ def delete_details():
                     if not line.strip().endswith(receipt_number):
                         file.write(line)
                     else:
-                        print(f"Deleted!: {line.strip()}") #Debug
-            messagebox.showinfo("Sucess", f"Details with receipt number: {receipt_number} deleted successfully")
+                        messagebox.showinfo("Sucess", f"Details with receipt number:  {receipt_number} deleted successfully")
         except FileNotFoundError:
-            messagebox.showwarning("Warning", "No data file found")
+            messagebox.showwarning("Warning", "Receipt number not found")
     else:
         messagebox.showwarning("Warning", "Please enter a valid receipt number")
-
-#def function to generate receipt number
-#def generate_receipt_number():
-    #while True:
-       # randInt = random.randint(100000, 999999)
-        #if randInt not in used_receipt_numbers:
-          #  used_receipt_numbers.add(randInt)
-          #  return randInt
-        
-#Save hire details and print
-#def print_details():
-    
-    #receipt =
-    
-#    if firstname and lastname and item and quantity:
-  #      hire = hire_spinbox.get()
-   #     items = items_combobox.get()
- #       print("First name: ", firstname, "Last name: ",lastname)
-    #    print("Number Hired:", hire, "Items:", items)
-     #   print("-------------------------------------------------")
-   # else:
-    #    tkinter.messagebox.showwarning(title="Error", message="First name and last name are required")
 
 def hire_window():
     global hire_window
@@ -138,7 +126,7 @@ def hire_window():
     last_name_entry.grid(row=1, column=1)
 
     #List of items user can choose from
-    #Always specifec parent except root window this is user info frame
+    #Use specific parent except root window this is user info frame
     global items_combobox
     items_label = tkinter.Label(user_info_frame, text="Item Hired", bg= "#f7dbc6")
     items_combobox = ttk.Combobox(user_info_frame, values= ["Balloons", "Ribbons","Tassels","Candles","Straws"], state="readonly")
@@ -152,7 +140,8 @@ def hire_window():
     hire_spinbox = tkinter.Spinbox(user_info_frame, from_=1, to=110)
     hire_label.grid(row=2,column=1)
     hire_spinbox.grid(row=3, column=1)
-#Configure all widgets to have same padding
+    
+    #Configure all widgets to have same padding
     for widget in user_info_frame.winfo_children():
         widget.grid_configure(padx=10, pady=5)
 
@@ -171,12 +160,12 @@ def hire_window():
     delete_frame = tk.Frame(frame, bg='#f7dbc6')
     delete_frame.grid(row=4, column=0, padx=20, pady=20)
 
-    delete_label = tk.Label(delete_frame, text="Delete by receipt number:", bg="#f7dbc6")
+    delete_label = tk.Label(delete_frame, text="Enter receipt number to return:", bg="#f7dbc6")
     delete_label.grid(row=0, column=0, padx=10, pady=5)
     global delete_entry
     delete_entry= tk.Entry(delete_frame)
     delete_entry.grid(row=1, column=0, padx=10, pady=5)
-    delete_button = tk.Button(delete_frame, text ="Return",command=delete_details)
+    delete_button = tk.Button(delete_frame, text ="Return Items",command=delete_details)
     delete_button.grid(row=2, column=0, sticky="news", padx=10, pady=5)                 
     
 #Main window setup
@@ -185,31 +174,27 @@ main_window.title("Julie's Party Hire Store Data Entry Form")
 main_window.geometry('275x455')
 main_window.configure(background='#f7dbc6')
 
-
 #Header Setup
 #header_bg_frame = tk.Frame(main_window, bg='#f5e3d3', height=50, width=400)#not working
 #header_bg_frame.pack()
-
 
 party_img = PhotoImage(file="julies_party.png")
 
 image_label = Label(main_window, image=party_img, bg='#f7dbc6', width= 250, height= 250)
 image_label.grid(column= 1, row=0, sticky="news", padx=10, pady=10)
 
-#IMAGE_PATH = "C:/Users/OneDrive/Ahana - Lynfield College/2PAD/Ahana Lal - 91897 and 91896 Assessment"
-
-#IMAGE_PATH = "C:/Users/akokatnur/OneDrive - Lynfield College/Desktop/Python"
 #header_frame =tk.Frame(header_bg_frame, bg ='#f5e3d3', height=50, width=400)#not working
 #header_frame.pack()
 
 #header_label = tk.Label(header_frame, text="Julie's Party Hire Store", font=("Sans serif", 24), bg= "#f7dbc6")
 #header_label.pack()
+
 #Hire/Return button
-button1 = tkinter.Button(main_window, text = 'Hire', font=("Arial", 12, "bold"),command = hire_window, width= 15, height= 3)
+button1 = tkinter.Button(main_window, text = 'Hire', bg='#eda6ab', font=("Arial", 12, "bold"),command = hire_window, width= 15, height= 3)
 button1.grid(column=1, row=1, sticky="news", padx=10, pady=10)
 
 #Quit button
-button3 = tk.Button(main_window, text = 'Quit', font=("Arial", 12, "bold"), command = quit_form, width= 15, height= 3)
+button3 = tk.Button(main_window, text = 'Quit', bg='#eda6ab', font=("Arial", 12, "bold"), command = quit_form, width= 15, height= 3)
 button3.grid(column=1, row=2, sticky="news", padx=10, pady=10)
 
 #Able to run the code
