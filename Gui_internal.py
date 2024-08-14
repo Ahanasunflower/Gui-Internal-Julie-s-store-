@@ -77,7 +77,7 @@ def delete_details():
                 lines = file.readlines()
             with open("customer_details.txt", "w") as file:
                 for line in lines:
-                    if not line.endswith(receipt_number + ","):
+                    if not line.strip().endswith(receipt_number):
                         file.write(line)
                     else:
                         print(f"Deleted!: {line.strip()}") #Debug
