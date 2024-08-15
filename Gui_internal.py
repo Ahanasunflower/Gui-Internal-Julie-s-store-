@@ -5,12 +5,12 @@ from tkinter import ttk
 from tkinter import messagebox
 import os
 import random
-#from tkinter import PhotoImage
+# from tkinter import PhotoImage.
 
-#Set to store the used receipt numbers to enusre no receipt number is repetead to be unique
+# Set to store the used receipt numbers to enusre no receipt number is repetead to be unique.
 used_receipt_numbers= set()
 
-#Function to ask the customer if they want to quit and quits
+# Function to ask the customer if they want to quit and quits.
 def quit_form():
     comfirmation = messagebox.askquestion("Quit","Are you sure you want to quit?")
     if comfirmation == 'yes':
