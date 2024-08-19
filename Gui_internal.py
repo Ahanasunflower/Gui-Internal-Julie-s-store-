@@ -5,7 +5,6 @@ from tkinter import ttk
 from tkinter import messagebox
 import os
 import random
-# from tkinter import PhotoImage.
 
 # Set to store the used receipt numbers to enusre no receipt number is repetead to be unique.
 used_receipt_numbers= set()
@@ -16,7 +15,7 @@ def quit_form():
     if comfirmation == 'yes':
         main_window.destroy()
 
-#Function to validate the customer's data
+# Function to validate the customer's data.
 def validate_data():
     firstname = first_name_entry.get()
     lastname = last_name_entry.get()
@@ -29,14 +28,16 @@ def validate_data():
     if not firstname.isalpha() or not lastname.isalpha():
         messagebox.showerror("Error", "Names can't contain special characters.")
         return False
-    if not (1 <=int(amount) <=200):
-        messagebox.showerror("Error", "Amount to hire must be between 1 and 200.")
+    if not amount.isdigit():
+        messagebox.showerror("Error", "Only numbers are valid for 'Number Hired'")
+        return False
+    if not (1 <=int(amount) <=500):
+        messagebox.showerror("Error", "Amount to hire must be between 1 and 500.")
         return False
     return True
 
 #Function that generates random receipt number
 def receipt():
-    #global generate_receipt
     while True:
         receipt_number = random.randint(100000,999999)
         if receipt_number not in used_receipt_numbers:
@@ -80,22 +81,29 @@ def display_data():
 
 #Function to delete customer details by receipt number
 #Use list like if receipt_number is here then minus row
-def delete_details():
+def delete_details():   
     receipt_number = delete_entry.get().strip()
-    if receipt_number:
-        try:
-            with open("customer_details.txt", "r") as file:
-                lines = file.readlines()
-            with open("customer_details.txt", "w") as file:
-                for line in lines:
-                    if not line.strip().endswith(receipt_number):
-                        file.write(line)
-                    else:
-                        messagebox.showinfo("Sucess", f"Details with receipt number:  {receipt_number} deleted successfully")
-        except FileNotFoundError:
-            messagebox.showwarning("Warning", "Receipt number not found")
-    else:
-        messagebox.showwarning("Warning", "Please enter a valid receipt number")
+
+    #if receipt_number:
+    receipt_found = False
+    try:
+        with open("customer_details.txt", "r") as file:
+            lines = file.readlines()
+        with open("customer_details.txt", "w") as file:
+            for line in lines:
+                if not line.strip().endswith(receipt_number):
+                    file.write(line)
+                else:
+                    receipt_found = True            
+                        #messagebox.showinfo("Sucess", f"Details with receipt number:  {receipt_number} deleted successfully")
+        if receipt_found:
+           messagebox.showinfo("Sucess", f"Details with receipt number:  {receipt_number} deleted successfully")
+        else:
+            messagebox.showwarning("Warning", f" Receipt number not found")
+    except FileNotFoundError:
+        messagebox.showwarning("Warning", "No data file found")
+    #else:
+        #messagebox.showwarning("Warning", "Please enter a valid receipt number")
 
 def hire_window():
     global hire_window
@@ -137,7 +145,7 @@ def hire_window():
     #Spinbox to select the number of items hired
     global hire_spinbox
     hire_label = tkinter.Label(user_info_frame, text="Number Hired", bg= "#f7dbc6")
-    hire_spinbox = tkinter.Spinbox(user_info_frame, from_=1, to=110)
+    hire_spinbox = tkinter.Spinbox(user_info_frame, from_=1, to=500)
     hire_label.grid(row=2,column=1)
     hire_spinbox.grid(row=3, column=1)
     
