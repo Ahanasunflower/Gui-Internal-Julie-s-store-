@@ -56,14 +56,14 @@ def save_data():
         
         # Save customer data to file(customer_details.txt).
         with open("customer_details.txt", "a") as file:
-            file.write(f"First name: {firstname}, Last name: {lastname}, Item: {item}, Amount: {amount}, Receipt: {receipt_number}\n")
+            file.write(f"First Name: {firstname}, Last Name: {lastname}, Item: {item}, Amount: {amount}, Receipt: {receipt_number}\n")
         # Reset input fields to default values (original).
         first_name_entry.delete(0,tk.END)
         last_name_entry.delete(0, tk.END)
         items_combobox.set('')
         hire_spinbox.delete(0,tk.END)
         hire_spinbox.insert(0,1)
-        messagebox.showinfo("Success!", f"Data saved successfully with receipt number:{receipt_number}")
+        messagebox.showinfo("Success!", f"Data saved successfully with receipt number: {receipt_number}")
 
 # Function to display all saved customer details.
 def display_data():
@@ -84,7 +84,7 @@ def delete_details():
     receipt_number = delete_entry.get().strip()
 
     if not receipt_number.isdigit():
-        messagebox.showwarning("Warning", "Please enter only numbers for the receipt number.")
+        messagebox.showerror("Error", "Please enter only numbers for the receipt number.")
         return
     
     receipt_found = False
@@ -99,7 +99,7 @@ def delete_details():
                     receipt_found = True
                     
         if receipt_found:
-           messagebox.showinfo("Sucess", f"Details with receipt number:  {receipt_number} deleted successfully")
+           messagebox.showinfo("Sucess", f"Details with receipt number: {receipt_number} deleted successfully")
         else:
             messagebox.showwarning("Warning", f" Receipt number not found")
     except FileNotFoundError:
@@ -120,14 +120,14 @@ def hire_window():
     user_info_frame.grid(row= 0, column=0, padx=20, pady=20)
 
     # Creates first name entry.
-    first_name_label = tkinter.Label(user_info_frame, text= "First name", bg ="#f7dbc6")
+    first_name_label = tkinter.Label(user_info_frame, text= "First Name", bg ="#f7dbc6")
     first_name_label.grid(row=0,column=0)
     global first_name_entry
     first_name_entry = tkinter.Entry(user_info_frame)
     first_name_entry.grid(row=1,column=0)
     
     # Creates last name entry.
-    last_name_label = tkinter.Label(user_info_frame, text= "Last name", bg= "#f7dbc6")
+    last_name_label = tkinter.Label(user_info_frame, text= "Last Name", bg= "#f7dbc6")
     last_name_label.grid(row=0,column=1)
     global last_name_entry
     last_name_entry = tkinter.Entry(user_info_frame)
